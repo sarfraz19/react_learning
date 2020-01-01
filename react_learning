@@ -1,0 +1,321 @@
+react hooks - to get rid of redaz
+###############
+jargons
+###############
+virtual DOM -   a component which has upadted alone changes eg.if a comment being placed
+		it doesnot require entire page reload, only that secction alone gets
+		reloaded
+props - 	properties
+component ----> 1) class based - powerfull 
+                2) functional based
+hooks - 	
+
+################
+getting started
+################
+requirements
+------------
+-> npm -g i create-react-app //to download and install react library
+
+now for creating a project 
+--> npx create-react-app project_name
+
+react files
+------------
+-> the packge.json is responsible for the libraries so when even the project is   
+   uploaded to github the node_modules folder is not uploaded, however it can be 
+   downloaded so those things will be in package.json file
+
+-> package-lock.json - its the core file
+
+-> public has the images,index page, etc.
+
+-> src has the main codes
+
+##############
+the hooks make it simple to code by using functions rather than classes
+##############
+
+
+to read in reactjs.org
+---------
+-> components & props
+-> state & lifecycle
+
+
+1st thing inside app.js
+1) import React from 'react';
+./ - same directory 
+../ - before one directory 
+
+class / className is used inside the <div> to make it more beautiful
+
+
+when we have imported the file we can use {import_name} to use it inside the react
+eg.
+import logo from "./logo.svg"
+<head><img src={logo} /></head>
+======
+state
+======
+state is king of central repo which stores the variable values
+
+=================
+when importing a folder do > npm install
+so this will install the node modules and gets the project go on 
+
+=============
+when we use class insead of function 
+the render is mandatory and inside render we have return 
+
+###############
+inside class we have props this is responsible for carrying our the values from other
+pages when a page is called. so it has the values
+
+###############
+by member functions we can make the state changes 
+to update the states, use
+this.setState({
+<variables......>
+});
+
+##########################
+react udemy course 
+##########################
+
+this.name = -> here this points to the present component 
+	    -> it has all the properties, based on instance of the class created
+	    eg. name="sarfraz"
+	        inside reutrn {this.name}
+inside render -> if we declare a variable we have to declare its data type
+	      eg. const name="sarfraz";
+	          inside {name} this will show the result
+
+#######################################
+class App extends Component {
+  name = "sarfraz";
+  render() {
+    return <div className="App">{console.log(this)}</div>;
+  }
+}
+######################################
+
+-> here render is a funstion anything declared within the function will have scope only
+   within that 
+
+#######################################
+class App extends Component {
+  name = "sarfraz";
+  render() {
+    return <div className="App">{console.log(this)}</div>;
+  }
+}
+
+//here we declare a instance of the class and it gets the property of the class
+const apps = new App();
+console.log(apps.name);
+#######################################
+the styles is saved as styles.js it is used as central things for all styles in a component
+so when we call styles in a coomponent styles.variable declared can be used to make the 
+things better
+so when there are 10 buttons used in a component so using styles we can make the css
+easrier in implementation 
+declaring styles and importing it 
+---------------------------------
+export const styles = {
+  border: "solid",
+  textAlign: "center",
+  boxShadow: "2px 2px"
+};
+
+to import in App.js 
+-------------------
+import * as styles from "./styles.js";
+
+to use inside the component
+<div style={styles.styles}>Styles</div>
+# styles.styles - it imports the specific property 
+
+############################
+seeing how react jsx works 
+we can even decrale a button like this 
+
+{React.createElement("button", { className: "App" }, "React")}
+
+so when we create a button it calls in the above form 
+so it calls the createElement class to make the button 
+
+##############################
+DOM(document object model)
+##############################
+-> it shows the structure of the HTML document
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <h1></h1>
+</body>
+</html>
+-> the above shows the html document type 
+-> html tag is the parent off head and head is the parent of title 
+-> title is no the child for html
+
+#####################
+react virtual DOM
+#####################
+-> the react uses virtual DOM to convert to browser unserstandable HTML DOM
+-> the react virtual DOM converts the JSX expressions to browser understandable from
+
+virtual DOM sits on                    HTML Browser
+top of the browser        --->         DOM
+HTML DOM
+
+####################
+-> in react the complete HTML document gets loaded 
+-> the content under the body div tag alone changes 
+-> reat is a single page app, its main page remains static while the values under the 
+   div tag alone changes, this making it easier where as in traditional webpages
+   the entire webpage gets reloaded
+-> the props are known as properties it is where data's are stored
+
+#############
+components
+#############
+-> this is what user sees on the screen 
+-> it is of two types 1) functional 2) container(class based components)
+1) functional components
+	-> they are read only 
+2) container components
+	-> they are used for user interactions 
+	-> to handle data in a more complex forms
+
+####################
+-> now creating a component1 in functional folder and exporting it 
+
+in component1.js
+----------------
+import React from "react";
+
+const component1 = props =>( 
+	<div>
+	component1
+	</div>;
+);
+export default component1;
+
+this is equivalent to 
+---------------------
+import React from "react";
+
+const component1 = props => {
+	return( 
+	<div>
+	component1
+	</div>;
+);
+}
+export default component1;
+
+-> the defualt is used so that while importing in App.js no need to use { Component} just
+import Component1 from "./functional/component1.js";
+and not
+import { Component1 } from "./functional/component1.js";
+
+using parameters in functional block 
+------------------------------------
+import React from "react";
+
+const component1 = prop => (
+  <div>
+    component1
+    {prop.name}
+    {prop.age}
+  </div>
+);
+
+export default component1;
+
+using parameters in container block
+-----------------------------------
+import React, { Component } from "react";
+
+class Container1 extends Component {
+  render() {
+    return <div>{this.props.nickname}</div>;
+  }
+}
+export default Container1;
+
+conclusion of both 
+==================
+-> both of them have nearly the same syntaz in App.js while importing in it 
+<Container1 nickname="sarf" age={22}/>
+-> but in container the props should be used to get the property values but in case of 
+   component any name is fine
+##############
+state
+##############
+-> the states should not be directly changed so use setState to change the state
+-> we can get the present data using prevState
+eg. (prevState, props) => ({
+    	this.setState({stateprop2: prevState.stateprop2 + 1})
+	});
+#the above code sets the changed state
+-> we also set the state in this format also
+eg. () => {
+	this.setState({stateprop2: this.state.stateprop2 + 1});
+	};
+-> the setState can be called multiple times, it goes without any error
+
+conditions 
+------------
+if(){
+}
+else
+{
+}
+this can be normally used but it should not be used 
+how ever we can use a ternary opertator
+{true ? <div>condition1</div> : <div>condition2</div> }
+
+############
+react life cycles
+two important life cycle methods
+1) component did mount
+2) component will mount
+
+1) component did mount - this works after the component has been rendered
+2) componentt will mount - this works after user going off from that page
+
+###########
+rendering list items
+
+//declaring a array
+
+  Arr = [
+    { id: 1, text: "text1", number: 1 },
+    { id: 2, text: "text1", number: 2 },
+    { id: 3, text: "text1", number: 3 },
+    { id: 4, text: "text1", number: 4 },
+    { id: 5, text: "text1", number: 5 }
+  ];
+
+  RenderList = props => (
+    <div>
+      {props.item.number}
+      {props.item.text}
+    </div>
+  );
+
+  render() {
+    return (
+      <div>
+        {this.Arr.map(item => (
+          <this.RenderList key={item.id} item={item} />
+        ))}
+      </div>
+    );
+  }
+
+the above is the code for rendering the list item
