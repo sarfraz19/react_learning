@@ -16,7 +16,7 @@ getting started
 requirements
 ------------
 -> npm -g i create-react-app //to download and install react library
-
+-> npm start //to start the app
 now for creating a project 
 --> npx create-react-app project_name
 
@@ -311,6 +311,8 @@ rendering list items
   render() {
     return (
       <div>
+      //{this.Arr.map((item, index) => (console.log(item)))} // this shows the item in the console and if we have index this also shows the 
+      // list
         {this.Arr.map(item => (
           <this.RenderList key={item.id} item={item} />
         ))}
@@ -319,3 +321,80 @@ rendering list items
   }
 
 the above is the code for rendering the list item
+
+###############################################################################
+the bellow is the code using this operator and using the set state and defining the value to state and putting it in the 
+div tag
+
+class Container1 extends Component {
+  state = {
+    value: ""
+  };
+  // this is used to handle the change in the value
+  handleChange = value => {
+    console.log(value.target.value);
+    this.setState({ value: value.target.value });
+  };
+  //this is used to handle the on click event
+  handleSubmit = vals => {
+    vals.preventDefault();
+    console.log(vals.target.name.value);
+  };
+
+  render() {
+    return (
+      <div>
+        {this.state.value}
+        <form onSubmit={this.handleSubmit}>
+          <p>Name</p>
+          <input type="text" id="name" onChange={this.handleChange}></input>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    );
+  }
+}
+export default Container1;
+
+############################################################################
+**********now using the function instead of this operator*******************
+
+class Container1 extends Component {
+  
+  // the constructor is used to make the handle functions access the this of the class by binding them in the constuctor 
+  // since they are functions using this makes them access values only inside the functions 
+  // thus binding them in constructor makes them access the global this
+  
+  constructor(props) {
+    super(props);
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  state = {
+    value: ""
+  };
+  // this is used to handle the change in the value
+  handleChange(value) {
+    console.log(value.target.value);
+    this.setState({ value: value.target.value });
+  }
+  //this is used to handle the on click event
+  handleSubmit(vals) {
+    vals.preventDefault();
+    console.log(vals.target.name.value);
+  }
+
+  render() {
+    return (
+      <div>
+        {this.state.value}
+        <form onSubmit={this.handleSubmit}>
+          <p>Name</p>
+          <input type="text" id="name" onChange={this.handleChange}></input>
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    );
+  }
+}
+export default Container1;
