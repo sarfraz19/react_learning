@@ -398,3 +398,557 @@ class Container1 extends Component {
   }
 }
 export default Container1;
+Schedule Fulfilment Date - அட்டவணை நிறைவேற்றும் தேதி
+Enrich Customer Order - வாடிக்கையாளர் ஆர்டரை வளப்படுத்தவும்
+Distribute Customer Order - வாடிக்கையாளர் ஆர்டரை விநியோகிக்கவும்
+Update distribution status - விநியோக நிலையைப் புதுப்பிக்கவும்
+
+oc ----(FQCO)---->OEBaseClient-----(OE Acceptance)----> ""|
+
+
+bill bpcode capital 
+bill bpcode small letters
+
+0120-4397535
+
+===================================
+kafka
+-> it acts as a middle ware between systems
+-> since the traffic can be high the kafka can be used for increasing the 
+   performance
+
+
+source -------> producers -------> kafka -------> consumers ------> target 
+system				     |				    systems
+		                     |
+				 Zookeeper
+
+-> kafka is like a ram 
+-> kafka connect helps in connecting with the database
+
+###################
+react 
+
+---------------
+Redux
+---------------
+-> global state is redux
+-> its state changes are using actions
+-> so any component can contact this global thing and update the value
+-> 3 principles
+	-> there is only one source of truth - one db
+	-> State is ready-only # however we can update the state using actions
+	-> changes re made with pure functions
+
+		react			redux			react-redux
+
+update state    this.setState()		store.dispatch()	mapDispathToProps()
+								this.props.dispatch_action()
+
+Read State	this.state.state_prop() store.getState()	mapStateToProps()
+								this.props.state_property
+
+
+##############
+reduz -> 1) Actions
+	 2) Reducers
+
+1) Actions - eg is a user logs in then isAuth=True is set 
+	-> it happens when ever an action occurs like loggin in, changing page etc
+
+2)Reducers
+	-> 
+
+components -> Dispatch -> Actions -> Reducers -> central storage -> triggers -> Subscription -> passes updated state to props -|
+     ^															       |
+     |															       |
+     |_________________________________________________________________________________________________________________________|
+
+
+using actions and reducers 
+
+####################################
+action_types.js - it has the values 
+####################################
+export const SUCCESS = "SUCCESS";
+export const FAILURE = "FAILURE";
+####################################
+
+
+###################################
+actions.js - it has the export thing values
+###################################
+import * as ACTION_TYPES from "./action_types.js";
+
+export const SUCCESS = {
+  type: ACTION_TYPES.SUCCESS
+};
+
+export const FAILURE = {
+  type: ACTION_TYPES.FAILURE
+};
+###################################
+
+#############################
+reducers.js - its the change state type
+#############################
+import * as ACTION_TYPES from "../actions/action_types";
+
+const initialState = {
+  stateprop1: false
+};
+
+// the actions are the default keyword of ES6, it can be used for logging in etc...
+const rootReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ACTION_TYPES.SUCCESS:
+      return {
+        // its the spread operator which make previous copy of the state
+        ...state,
+        stateprop1: true
+      };
+    case ACTION_TYPES.FAILURE:
+      return {
+        ...state,
+        stateprop1: false
+      };
+    default:
+      return state;
+  }
+};
+
+export default rootReducer;
+#############################
+	
+#############################
+index.js
+#############################
+import { Provider } from "react-redux";
+import rootReducer from "./store/reducers/reducers.js";
+import { createStore } from "redux";
+
+let store = createStore(rootReducer);
+
+//the store uses the varibales globally available and gets the value
+ReactDOM.render(
+  <Provider store={store}>
+    {" "}
+    <App />
+  </Provider>,
+  document.getElementById("root")
+);
+
+##################
+connect()
+##################
+read & actions container- connect(mapStateToProps,mapDispatchToProps)(container)
+read only container	- connect(mapStateToProps)(container)
+actions only container  - connect(null, mapDispatchToProps)(container)
+
+****************
+Reducers 
+********
+now using two reducers and combining it in index.js in reducer directory itself
+
+1st reducer reducers.js
+=======================
+import * as ACTION_TYPES from "../actions/action_types";
+
+const initialState = {
+  stateprop1: false
+};
+
+const Reducer1 = (state = initialState, action) => {
+  switch (action.type) {
+    case ACTION_TYPES.SUCCESS:
+      return {
+        // its the spread operator which make previous copy of the state
+        ...state,
+        stateprop1: true
+      };
+    case ACTION_TYPES.FAILURE:
+      return {
+        ...state,
+        stateprop1: false
+      };
+    default:
+      return state;
+  }
+};
+
+export default Reducer1;
+
+2nd reducer User_Reducer
+************************
+import * as ACTION_TYPES from "../actions/action_types";
+
+const initialState = {
+  user_text: "vals"
+};
+
+const UserReducer = (state = initialState, action) => {
+  switch (action.type) {
+    case ACTION_TYPES.USER_INPUT:
+      return {
+        ...state,
+        user_text: action.payload
+      };
+
+    default:
+      return state;
+  }
+};
+
+export default UserReducer;
+
+combined index.js reducer 
+*************************
+import Reducer1 from "./reducers";
+import UserReducer from "./user_reducer";
+import { combineReducers } from "redux";
+
+const rootReducer = combineReducers({
+  reducer1: Reducer1,
+  user_reducer: UserReducer
+});
+
+export default rootReducer;
+
+while importing it in index.js main file just point to reducer directory it will automatically take things
+before
+++++++
+import rootReducer from "./store/reducers/reducer.js";
+
+after
++++++
+import rootReducer from "./store/reducers";
+
+########################
+router - it is the parent componenet
+route - it makes the route specific to the component
+
+#######################
+now creating header.js 
+it has the links which need to be directed 
+
+<Link to={{pathname: '', search: , hash: ,state}}
+
+pathname -  its the pathname eg. /container
+search - to write quries using API's
+hash - its similar in vanilla java script
+state - a java script obj, kind of state 
+
+-> since the react is a single page application when we click the back button, it goes to the home page
+   hence the history library is used to maintain the routes, etc
+
+using history in js 
+===================
+import createHistory from "history/createBrowserHistory";
+
+export default createHistory();
+
+-> in above the createHistory() this () is mandotory otherwise it will not work 
+
+the header.js - it has the link values 
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
+class Header extends Component {
+  render() {
+    return (
+      <div>
+        <Link to="component1">component 1</Link>
+        <Link to="component2">component 2</Link>
+        <Link to="component3">component 3</Link>
+      </div>
+    );
+  }
+}
+
+export default Header;
+
+-> the 'to' puts the path in the url and the name in between the link is displayed in the screen
+
+after clicking that it goes to the routes 
+==========================================
+import React, { Component } from "react";
+import Component1 from "./functional/component1";
+import Component2 from "./functional/component2";
+import Component3 from "./functional/component3";
+
+import history from "./utils/history";
+import Header from "./container/header";
+import Container1 from "./container/container1";
+
+import { Router, Route } from "react-router";
+
+class Routes extends Component {
+  render() {
+    return (
+      <div>
+        <Router history={history}>
+          {/* //need to wrap under single div after the parent Router */}
+          <div>
+            <Header />
+            <Route path="/container1" component={Container1} />
+            <Route path="/component1" component={Component1} />
+            <Route path="/component2" component={Component2} />
+            <Route path="/component3" component={Component3} />
+          </div>
+        </Router>
+      </div>
+    );
+  }
+}
+
+export default Routes;
+
+-> based on the url the component gets loaded and the contents of that component is displayed 
+-> the <Router history={history}> its the parent component and history if maily required else the back 
+   button goes to the home page
+-> history if mandotory else the page will throw (TypeError: Cannot read property 'location' of undefined)
+
+==================
+problem faced
+==================
+-> /home displays a webpage
+-> /home/component display the content of the component along with the home page 
+-> the swith is included in 'react-router' so that only those components gets loaded and not the entire home page itself
+
+++++++++++++++
+before switch
+++++++++++++++
+import React, { Component } from "react";
+import Component1 from "./functional/component1";
+import Component2 from "./functional/component2";
+import Component3 from "./functional/component3";
+
+import history from "./utils/history";
+import Header from "./container/header";
+import Container1 from "./container/container1";
+
+import { Router, Route } from "react-router";
+
+class Routes extends Component {
+  render() {
+    return (
+      <div>
+        <Router history={history}>
+          {/* //need to wrap under single div after the parent Router */}
+          <div>
+            <Header />
+              <Route path="/" component={Container1} />
+              <Route path="/component1" component={Component1} />
+              <Route path="/component2" component={Component2} />
+              <Route path="/component3" component={Component3} />
+          </div>
+        </Router>
+      </div>
+    );
+  }
+}
+
+export default Routes;
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+to make it switch only to that component we use switch in 'react-router'
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+import React, { Component } from "react";
+import Component1 from "./functional/component1";
+import Component2 from "./functional/component2";
+import Component3 from "./functional/component3";
+
+import history from "./utils/history";
+import Header from "./container/header";
+import Container1 from "./container/container1";
+
+import { Router, Route, Switch } from "react-router";
+
+class Routes extends Component {
+  render() {
+    return (
+      <div>
+        <Router history={history}>
+          {/* //need to wrap under single div after the parent Router */}
+          <div>
+            <Header />
+            <Switch>
+              <Route exact path="/" component={Container1} />
+              <Route path="/component1" component={Component1} />
+              <Route path="/component2" component={Component2} />
+              <Route path="/component3" component={Component3} />
+            </Switch>
+          </div>
+        </Router>
+      </div>
+    );
+  }
+}
+
+export default Routes;
+==========================
+-> the exact keyword in path="/" is important to make the switching of the component
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+passing props in the router 
++++++++++++++++++++++++++++++
+eg. <Route path="/component1" component={Component1} />
+-> insead of using component= we can also use render= & pass the component values
+
+<Route path="/component1" render={(props) => <Component1 {...props} />} />
+-> The {...props} its mandatory to pass the values to the component
+
+#################################
+#################################
+#  				#
+#  state syntax is 		#
+#  state= and not state:	#
+#				#
+#################################
+#################################
+
+now dynamically setting up the route
+####################################
+
+-> the header file for dynamic routing 
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
+
+class Header extends Component {
+  state = {
+    num: [{ id: 1 }, { id: 2 }, { id: 3 }]
+  };
+  render() {
+    return (
+      <div>
+        <Link to="/" style={{ padding: "5px" }}>
+          home
+        </Link>
+        {this.state.num.map(num => (
+          <Link
+            key={num.id}
+            to={{ pathname: "/component/" + num.id }}
+            style={{ padding: "5px" }}
+          >
+            component {num.id}
+          </Link>
+        ))}
+      </div>
+    );
+  }
+}
+
+export default Header;
+++++++++++++++++++++++++
+-> the this.state.num.map it is used to map the values and create a dynamic webpage
+
+in route file 
++++++++++++++++++++++++++
+import React, { Component } from "react";
+import Component1 from "./functional/component1";
+import history from "./utils/history";
+import Header from "./container/header";
+import Container1 from "./container/container1";
+import { Router, Route, Switch } from "react-router";
+
+class Routes extends Component {
+  render() {
+    return (
+      <div>
+        <Router history={history}>
+          {/* //need to wrap under single div after the parent Router */}
+          <div>
+            <Header />
+            <Switch>
+              <Route exact path="/" component={Container1} />
+              {/* <Route path="/component1" component={Component1} /> */}
+              <Route
+                path="/component/:id"
+                render={props => <Component1 {...props} />}
+              />
+            </Switch>
+          </div>
+        </Router>
+      </div>
+    );
+  }
+}
+
+export default Routes;
+++++++++++++++++++++++++++++++++
+-> the props is passed as variable and those values are displayed in the page
+
+changes in component 1
+++++++++++++++++++++++++
+
+import React from "react";
+
+const component1 = prop => (
+  <div>
+    component {prop.match.params.id}
+    {console.log(prop)}
+  </div>
+);
+
+export default component1;
+
+++++++++++++++++++++++++++++
+auth0 authendication 
+
+user clicks the -> auth0 SDK redirects to  	    ->  Autho0 Page (not part of out web) -> user Credentials are   ->  if the user credentials match -----
+login button	   Auth0 hosted page(Auth0 server)	allows user to sign in or signup     securely sent to auth0     Auth0 returns a JWT Token
+
+
+
+the JWT token is saved   ->  we use React to check if        -> if Yes, User is Authenticated
+in local browser storage     a JWT token is present in local
+			     browser storage
+
++++++++++++++++++++++++++++
+-> setup auth.js in utils 
+
+the content inside the code is 
+import auth0 from "auth0-js";
+
+export default class Auth {
+  //this webAuth is responsible for authorization
+  auth0 = new auth0.WebAuth({
+    domain: "fakrudeen.auth0.com",
+    clientID: "8t57FvLYzpx5xEC3RsLSKzPEHs9RJE48",
+    redirectUri: "http://localhost:3000/callback",
+    responseType: "token id_token",
+    scope: "openid profile email"
+  });
+
+  login = () => {
+    this.auth0.authorize();
+  };
+}
+
+-> then import it in the component and complete the authorization 
+	->import Auth from "../utils/auth";
+	->const auth = new Auth();
+	-><button onClick={() => auth.login()}>Login</button> // this completes the login
+
+-> once the login/signup is complete the auth send a response back in url in field id_token=values........
+	-> which is a coded form of josn
+	-> it has information that can be decoded and used 
+	-> it can parsed using jwt.io
+
+=============================
+=> when we face issues in storing values make sure to look at the API calls values has the same variables
+
+
+user logs in -> user is redirected to   -> user is redirected to the   ->  user is redirected to the
+		the callback component     auth-check container where	   Home page with the updated 
+		from Auth0		   the redux state is updated	   redux state
+
+
+user logs out -> user is redirected to the aut-check  -> user is redirected to the
+		 container where the redux state is 	 home page with the updated
+		 updated				 redux state
+
+====================
+now enabling /authcheck route
+=> when the customer logs in then the call automatically goes to /callback & to /authcheck 
+=> the authcheck is where we check the login successfullness, etc 
